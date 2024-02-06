@@ -1,5 +1,7 @@
 # The AirBnB Clone Project - 0x00. AirBnB clone - The console.
+
 ![AirBnB Logo](https://www.pngitem.com/pimgs/m/132-1322125_transparent-background-airbnb-logo-hd-png-download.png)
+
 By Benjamin Richard and Robert Onawole Abayomi
 
 ## Project Description
