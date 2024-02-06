@@ -2,7 +2,7 @@
 
 ![AirBnB Logo](https://www.pngitem.com/pimgs/m/132-1322125_transparent-background-airbnb-logo-hd-png-download.png)
 
-By Benjamin Richard and Robert Onawole Abayomi
+#By Benjamin Richard and Robert Onawole Abayomi
 
 ## Project Description
 This represents the initial phase of our AirBnB clone project. We focused on developing the backend functionality and then linked it to a console application using Python's cmd module
@@ -173,7 +173,6 @@ Usage	update <class name> <id> <attribute name> "<attribute value>" ---or--- <cl
 -----	-----
 8. count	Retrieve the number of instances of a class.
 Usage	<class name>.count()
-9. 
 
 ## Author
 Benjamin Richard and Robert Onawole Abayomi
