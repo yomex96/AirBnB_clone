@@ -828,4 +828,4 @@ class Test_count(unittest.TestCase):
         try:
             remove("file.json")
         except:
-
+            pass
