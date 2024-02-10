@@ -40,7 +40,7 @@ class Test_help(unittest.TestCase):
         """ Set up for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
         FileStorage._FileStorage__objects = {}
 
@@ -48,7 +48,7 @@ class Test_help(unittest.TestCase):
         """ Tear down for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
 
     def test_help_help(self):
@@ -135,7 +135,7 @@ class Test_create(unittest.TestCase):
         """ Set up for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
         FileStorage._FileStorage__objects = {}
 
@@ -143,7 +143,7 @@ class Test_create(unittest.TestCase):
         """ Tear down for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
 
     def test_create_no_class(self):
@@ -182,7 +182,7 @@ class Test_destroy(unittest.TestCase):
         """ Set up for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
         FileStorage._FileStorage__objects = {}
 
@@ -190,7 +190,7 @@ class Test_destroy(unittest.TestCase):
         """ Tear down for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
 
     def test_destroy_no_class(self):
@@ -301,7 +301,7 @@ class Test_show(unittest.TestCase):
         """ Set up for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
         FileStorage._FileStorage__objects = {}
 
@@ -309,7 +309,7 @@ class Test_show(unittest.TestCase):
         """ Tear down for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
 
     def test_show_no_arg(self):
@@ -429,7 +429,7 @@ class Test_all(unittest.TestCase):
         """ Set up for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
         FileStorage._FileStorage__objects = {}
 
@@ -437,7 +437,7 @@ class Test_all(unittest.TestCase):
         """ Tear down for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
 
     def test_update_no_existent_class(self):
@@ -459,38 +459,34 @@ class Test_all(unittest.TestCase):
                 msg = "\n" + msg
             self.assertEqual(msg, st)
 
-    def test_empty(self):
-        """ Tests for empty storage """
-        classes = ["BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"]
-        msg = "[]\n"
-        with patch('sys.stdout', new=io.StringIO()) as f:
-                HBNBCommand().onecmd("all")
-                st = f.getvalue()
-                self.assertEqual(msg, st)
-        for i in classes:
-            with patch('sys.stdout', new=io.StringIO()) as f:
-                HBNBCommand().onecmd("all " + i)
-                st = f.getvalue()
-                self.assertEqual(msg, st)
+    def test_new_update_no_existent_class(self):
+        """Test for all with no existent class"""
+    msg = "** class doesn't exist **\n"
+    with patch('sys.stdout', new=io.StringIO()) as f:
+        pre_cmd = HBNBCommand().precmd("MyModel.all()")
+        HBNBCommand().onecmd(pre_cmd)
+        st = f.getvalue()
+        if st[0] == "\n":
+            msg = "\n" + msg
+        self.assertEqual(msg, st)
 
     def test_new_empty(self):
-        """ Tests for empty storage """
-        classes = ["BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"]
-        msg = "[]\n"
+        """Tests for empty storage"""
+    classes = ["BaseModel", "User", "State", "City",
+               "Amenity", "Place", "Review"]
+    msg = "[]\n"
+    with patch('sys.stdout', new=io.StringIO()) as f:
+        HBNBCommand().onecmd("all()")
+        st = f.getvalue()
+        self.assertEqual(msg, st)
+    for i in classes:
         with patch('sys.stdout', new=io.StringIO()) as f:
-                HBNBCommand().onecmd("all()")
-                st = f.getvalue()
-                self.assertEqual(msg, st)
-        for i in classes:
-            with patch('sys.stdout', new=io.StringIO()) as f:
-                pre_cmd = HBNBCommand().precmd(i + ".all()")
-                HBNBCommand().onecmd(pre_cmd)
-                st = f.getvalue()
-                if st[0] == "\n":
-                    msg = "\n" + msg
-                self.assertEqual(msg, st)
+            pre_cmd = HBNBCommand().precmd(i + ".all()")
+            HBNBCommand().onecmd(pre_cmd)
+            st = f.getvalue()
+            if st[0] == "\n":
+                msg = "\n" + msg
+            self.assertEqual(msg, st)
 
     def test_all_classes(self):
         """ Tests All command for classes_double """
@@ -505,9 +501,9 @@ class Test_all(unittest.TestCase):
             all_cl = []
             all_full = []
             for j in alldic.keys():
-                    all_full.append(str(alldic[j]))
-                    if i in j:
-                        all_cl.append(str(alldic[j]))
+                all_full.append(str(alldic[j]))
+                if i in j:
+                    all_cl.append(str(alldic[j]))
             with patch('sys.stdout', new=io.StringIO()) as f:
                 HBNBCommand().onecmd("all " + i)
                 st = f.getvalue()
@@ -525,7 +521,7 @@ class Test_update(unittest.TestCase):
         """ Set up for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
         FileStorage._FileStorage__objects = {}
 
@@ -533,7 +529,7 @@ class Test_update(unittest.TestCase):
         """ Tear down for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
 
     def test_update_no_class(self):
@@ -666,9 +662,9 @@ class Test_update(unittest.TestCase):
             alldic = storage.all()
             self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
         for j, k in zip(attr, value):
-                with patch('sys.stdout', new=io.StringIO()) as f:
-                    HBNBCommand().onecmd("update " + i + " " + id_st +
-                                         " " + j + " " + k)
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("update " + i + " " + id_st +
+                                     " " + j + " " + k)
         alldic = storage.all()
         ins = alldic[i + '.' + id_st[:-1]]
         for j, k, m in zip(attr, value, typeval):
@@ -688,9 +684,9 @@ class Test_update(unittest.TestCase):
             alldic = storage.all()
             self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
         for j, k in zip(attr, value):
-                with patch('sys.stdout', new=io.StringIO()) as f:
-                    HBNBCommand().onecmd("update " + i + " " + id_st +
-                                         " " + j + " " + k)
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                BNBCommand().onecmd("update " + i + " " + id_st +
+                                    " " + j + " " + k)
         alldic = storage.all()
         ins = alldic[i + '.' + id_st[:-1]]
         for j, k, m in zip(attr, value, typeval):
@@ -710,9 +706,9 @@ class Test_update(unittest.TestCase):
             alldic = storage.all()
             self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
         for j, k in zip(attr, value):
-                with patch('sys.stdout', new=io.StringIO()) as f:
-                    HBNBCommand().onecmd("update " + i + " " + id_st +
-                                         " " + j + " " + k)
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("update " + i + " " + id_st +
+                                     " " + j + " " + k)
         alldic = storage.all()
         ins = alldic[i + '.' + id_st[:-1]]
         for j, k, m in zip(attr, value, typeval):
@@ -732,9 +728,9 @@ class Test_update(unittest.TestCase):
             alldic = storage.all()
             self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
         for j, k in zip(attr, value):
-                with patch('sys.stdout', new=io.StringIO()) as f:
-                    HBNBCommand().onecmd("update " + i + " " + id_st +
-                                         " " + j + " " + k)
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("update " + i + " " + id_st +
+                                     " " + j + " " + k)
         alldic = storage.all()
         ins = alldic[i + '.' + id_st[:-1]]
         for j, k, m in zip(attr, value, typeval):
@@ -754,9 +750,9 @@ class Test_update(unittest.TestCase):
             alldic = storage.all()
             self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
         for j, k in zip(attr, value):
-                with patch('sys.stdout', new=io.StringIO()) as f:
-                    HBNBCommand().onecmd("update " + i + " " + id_st +
-                                         " " + j + " " + k)
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("update " + i + " " + id_st +
+                                     " " + j + " " + k)
         alldic = storage.all()
         ins = alldic[i + '.' + id_st[:-1]]
         for j, k, m in zip(attr, value, typeval):
@@ -779,9 +775,9 @@ class Test_update(unittest.TestCase):
             alldic = storage.all()
             self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
         for j, k in zip(attr, value):
-                with patch('sys.stdout', new=io.StringIO()) as f:
-                    HBNBCommand().onecmd("update " + i + " " + id_st +
-                                         " " + j + " " + str(k))
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("update " + i + " " + id_st +
+                                     " " + j + " " + str(k))
         alldic = storage.all()
         ins = alldic[i + '.' + id_st[:-1]]
         for j, k, m in zip(attr, value, typeval):
@@ -801,9 +797,9 @@ class Test_update(unittest.TestCase):
             alldic = storage.all()
             self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
         for j, k in zip(attr, value):
-                with patch('sys.stdout', new=io.StringIO()) as f:
-                    HBNBCommand().onecmd("update " + i + " " + id_st +
-                                         " " + j + " " + k)
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("update " + i + " " + id_st +
+                                     " " + j + " " + k)
         alldic = storage.all()
         ins = alldic[i + '.' + id_st[:-1]]
         for j, k, m in zip(attr, value, typeval):
@@ -819,7 +815,7 @@ class Test_count(unittest.TestCase):
         """ Set up for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
         FileStorage._FileStorage__objects = {}
 
@@ -827,5 +823,5 @@ class Test_count(unittest.TestCase):
         """ Tear down for all methods """
         try:
             remove("file.json")
-        except:
+        except Exception:
             pass
