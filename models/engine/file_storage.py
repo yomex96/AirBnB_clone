@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """
-Serializes instances to a JSON file and
-deserializes JSON file to instances.
+The class FileStorage is a class that define the new dictionary of the class
 """
 
+
+from models.base_model import BaseModel
 import json
 import os
-from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -14,61 +14,88 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
-class_dict = {
-    "BaseModel": BaseModel,
-    "User": User,
-    "Place": Place,
-    "Amenity": Amenity,
-    "City": City,
-    "Review": Review,
-    "State": State
-}
-# Filestorage == type(self)
-
 
 class FileStorage:
-    """The file storage engine class, that is;
-    A class that serialize and deserialize instances to a JSON file
     """
-    __file_path = "file.json"
-    __objects = {}
+    All the instance used listed:
+        all(self):
+        new(self, obj):
+        save(self):
+        reload(self):
+    """
+
+    def __init__(self):
+        """
+        Function - all(self):
+            return the object
+
+            Object:
+                nothing
+
+            Return:
+                object
+        """
+        self.__file_path = "file.json"
+        self.__objects = dict()
 
     def all(self):
-        """Returns the dictionary of objects"""
-        return type(self).__objects
+        """
+        Function - all(self):
+            return the object
+
+            Object:
+                nothing
+
+            Return:
+                object
+        """
+        return(self.__objects)
 
     def new(self, obj):
-        """Sets new obj in __objects dictionary."""
-        if obj.id in type(self).__objects:
-            print("exists")
-            return
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        type(self).__objects[key] = obj
-        # OR
-        # type(self).__objects[obj.id] = obj
+        """
+        Function - new(self, obj):
+            add new object to the dict
+
+            Object:
+                copy(str): the dictionary of the file
+
+            Return:
+                nothing
+        """
+        self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
 
     def save(self):
-        """serializes __objects to the JSON file (path: __file_path)"""
-        new_dict = []
-        for obj in type(self).__objects.values():
-            new_dict.append(obj.to_dict())
-            # for key, obj in type(self).__objects.items():
-            #    new_dict[key] = obj.to_dict()
-        with open(type(self).__file_path, "w", encoding='utf-8') as file:
-            json.dump(new_dict, file)
-            # OR
-            # with open(type(self).__file_path, "w", encoding="utf-8") as file:
-            #   json.dump([obj.to_dict() for obj in self.all().values()], file)
+        """
+        Function - save(self):
+            save the new dictionary
+
+            Object:
+                file(str): the name of wherethe file is
+                dict3(dict): the new dictionary
+
+            Return:
+                nothing
+        """
+        with open(self.__file_path, mode="w", encoding="utf-8") as my_file:
+            __dic = {k: v.to_dict() for k, v in self.__objects.items()}
+            json.dump(__dic, my_file)
 
     def reload(self):
-        """Deserializes the JSON file to __objects if it exists"""
-        if os.path.exists(type(self).__file_path) is True:
-            return
-            try:
-                with open(type(self).__file_path, "r") as file:
-                    new_obj = json.load(file)
-                    for key, val in new_obj.items():
-                        obj = self.class_dict[val['__class__']](**val)
-                        type(self).__objects[key] = obj
-            except Exception:
-                pass
+        """
+        Function - reload(self):
+            reload a new dictionary
+
+            Object:
+                file(str): the name of wherethe file is
+                FileStorage.__objects(dict): the new dictionary
+
+            Return:
+                nothing
+        """
+        try:
+            with open(self.__file_path, mode="r", encoding="utf-8") as f:
+                dic_to_dic = json.load(f)
+                for val in dic_to_dic.values():
+                    self.new(eval(val['__class__'])(**val))
+        except Exception:
+            pass
