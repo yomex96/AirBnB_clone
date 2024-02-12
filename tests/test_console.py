@@ -449,18 +449,7 @@ class Test_all(unittest.TestCase):
             self.assertEqual(msg, st)
 
     def test_new_update_no_existent_class(self):
-        """  Test for all with no existent class """
-        msg = "** class doesn't exist **\n"
-        with patch('sys.stdout', new=io.StringIO()) as f:
-            pre_cmd = HBNBCommand().precmd("MyModel.all()")
-            HBNBCommand().onecmd(pre_cmd)
-            st = f.getvalue()
-            if st[0] == "\n":
-                msg = "\n" + msg
-            self.assertEqual(msg, st)
-
-    def test_new_update_no_existent_class(self):
-        """Test for all with no existent class"""
+    """Test for all with no existent class"""
     msg = "** class doesn't exist **\n"
     with patch('sys.stdout', new=io.StringIO()) as f:
         pre_cmd = HBNBCommand().precmd("MyModel.all()")
@@ -469,6 +458,8 @@ class Test_all(unittest.TestCase):
         if st[0] == "\n":
             msg = "\n" + msg
         self.assertEqual(msg, st)
+
+
 
     def test_new_empty(self):
         """Tests for empty storage"""
